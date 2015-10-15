@@ -6,32 +6,36 @@ import com.mettl.type.CustomerClass;
 
 /**
  * @author amahajan
- *
+ * 
  */
 public class DtoResult {
 
-	private String customerName;
+	private String				customerName;
 
-	private String email;
+	private String				email;
 
-	private long totalPoints;
+	private long				totalPoints;
 
-	private CustomerClass customerClass;
+	private CustomerClass		customerClass;
 
-	private List<Transaction> transactions;
+	private List<Transaction>	transactions;
 
-	//Parameterized constructor
+	private long				totalTAmount;
+
+	// Parameterized constructor
 	public DtoResult(String customerName, String email, long totalPoints,
-			CustomerClass customerClass, List<Transaction> transactions) {
+			CustomerClass customerClass, List<Transaction> transactions,
+			long totalTAmount) {
 		super();
 		this.customerName = customerName;
 		this.email = email;
 		this.totalPoints = totalPoints;
 		this.customerClass = customerClass;
 		this.transactions = transactions;
+		this.totalTAmount = totalTAmount;
 	}
 
-	//Default constructor
+	// Default constructor
 	public DtoResult() {
 
 	}
@@ -111,16 +115,31 @@ public class DtoResult {
 		this.transactions = transactions;
 	}
 
+	/**
+	 * @return the totalTAmount
+	 */
+	public long getTotalTAmount() {
+		return totalTAmount;
+	}
+
+	/**
+	 * @param totalTAmount
+	 *            the totalTAmount to set
+	 */
+	public void setTotalTAmount(long totalTAmount) {
+		this.totalTAmount = totalTAmount;
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "DtoResult [customerName=" + customerName + ", email=" + email
 				+ ", totalPoints=" + totalPoints + ", customerClass="
-				+ customerClass + ", transactions=" + transactions + "]";
+				+ customerClass + ", transactions=" + transactions
+				+ ", totalTAmount=" + totalTAmount + "]";
 	}
 
 }

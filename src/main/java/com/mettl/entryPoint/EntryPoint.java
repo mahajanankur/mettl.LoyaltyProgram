@@ -6,24 +6,26 @@ import java.util.List;
 import java.util.Set;
 
 import com.mettl.dto.CustomerDetails;
+import com.mettl.dto.DtoResult;
 import com.mettl.impl.LoyaltyProgramImpl;
 
 /**
  * @author amahajan
- *
+ * 
  */
 public class EntryPoint {
 
-	private static LoyaltyProgramImpl impl = new LoyaltyProgramImpl();
+	private static LoyaltyProgramImpl	impl	= new LoyaltyProgramImpl();
 
 	public static void main(String[] args) {
 		List<CustomerDetails> iList = buildInput();
-		//this the set of unique card numbers.
+		// this the set of unique card numbers.
 		Set<CustomerDetails> uSet = new LinkedHashSet<CustomerDetails>();
 		uSet.addAll(iList);
 
-		impl.processTransactionList(iList,uSet);
-		for (CustomerDetails customerDetails : uSet) {
+		List<DtoResult> processTransactionList = impl.processTransactionList(
+				iList, uSet);
+		for (DtoResult customerDetails : processTransactionList) {
 			System.out.println(customerDetails);
 		}
 	}
