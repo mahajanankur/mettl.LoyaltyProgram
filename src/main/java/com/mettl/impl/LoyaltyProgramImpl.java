@@ -16,14 +16,23 @@ import com.mettl.type.CustomerClass;
  */
 public class LoyaltyProgramImpl {
 
+	/**
+	 * This method is used to process the input list to get the result.
+	 * 
+	 * @param iList
+	 * @param uSet
+	 * @return resultList
+	 */
 	public List<DtoResult> processTransactionList(List<CustomerDetails> iList,
 			Set<CustomerDetails> uSet) {
-
 		List<DtoResult> resultList = new ArrayList<DtoResult>();
 		for (CustomerDetails uniqueInfo : uSet) {
 			DtoResult dto = new DtoResult();
 			String cardNumber = uniqueInfo.getCardNumber();
 			long totalAmount = 0;
+			// Initial loyalty point value is 100 because customer gets this as
+			// joining bonus.
+			long totLPoints = 100;
 			// Sub list for transactions detail
 			List<Transaction> tranList = new ArrayList<Transaction>();
 			for (CustomerDetails listInfo : iList) {
@@ -38,7 +47,6 @@ public class LoyaltyProgramImpl {
 							dto.setEmail(listInfo.getEmail());
 						}
 					}
-
 					// check for name and email change - End
 					totalAmount += listInfo.getpAmount();
 					// setting sub transaction list details
@@ -50,17 +58,26 @@ public class LoyaltyProgramImpl {
 					tranList.add(transaction);
 				}
 				// card number check -End
-				// setting sun transaction list to result dto.
-				dto.setTransactions(tranList);
-				dto.setTotalTAmount(totalAmount);
-				// setting the customer class based on the total transaction
-				// amount.
-				CustomerClass cClass = assignCustomerClassByAmount(totalAmount);
-				dto.setCustomerClass(cClass);
-				// Calculate loyalty points
-				long totLPoints = getLoyaltyPoints(cClass, totalAmount);
-				dto.setTotalPoints(totLPoints);
 			}
+
+			dto.setTotalTAmount(totalAmount);
+			// setting the customer class based on the total transaction
+			// amount.
+			CustomerClass cClass = assignCustomerClassByAmount(totalAmount);
+			dto.setCustomerClass(cClass);
+			// Calculate loyalty points
+			totLPoints += getLoyaltyPoints(cClass, totalAmount);
+			dto.setTotalPoints(totLPoints);
+			// calculating sub list loyalty points
+			for (Transaction transaction : tranList) {
+				long loyaltyPoints = getLoyaltyPoints(cClass,
+						transaction.getTrxAmount());
+				transaction.setPointsEarned(loyaltyPoints);
+			}
+
+			// setting sub transaction list to result dto.
+			dto.setTransactions(tranList);
+			// resultList
 			resultList.add(dto);
 		}
 		return resultList;

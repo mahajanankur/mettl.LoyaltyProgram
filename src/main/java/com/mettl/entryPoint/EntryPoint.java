@@ -15,17 +15,16 @@ import com.mettl.impl.LoyaltyProgramImpl;
  */
 public class EntryPoint {
 
-	private static LoyaltyProgramImpl	impl	= new LoyaltyProgramImpl();
+	private static LoyaltyProgramImpl impl = new LoyaltyProgramImpl();
 
 	public static void main(String[] args) {
 		List<CustomerDetails> iList = buildInput();
-		// this the set of unique card numbers.
+		// the set of unique card numbers.
 		Set<CustomerDetails> uSet = new LinkedHashSet<CustomerDetails>();
 		uSet.addAll(iList);
 
-		List<DtoResult> processTransactionList = impl.processTransactionList(
-				iList, uSet);
-		for (DtoResult customerDetails : processTransactionList) {
+		List<DtoResult> resultList = impl.processTransactionList(iList, uSet);
+		for (DtoResult customerDetails : resultList) {
 			System.out.println(customerDetails);
 		}
 	}
