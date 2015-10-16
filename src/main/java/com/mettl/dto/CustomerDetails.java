@@ -133,7 +133,8 @@ public class CustomerDetails {
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * Used hashcode() and equals() to get unique collection based on loyalty
+	 * card number.
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */

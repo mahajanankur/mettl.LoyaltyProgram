@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.mettl.schemes.GoldLoyaltyProgram;
-import com.mettl.type.CustomerClass;
-import com.mettl.contracts.ILoyaltyProgramStrategy;
 import com.mettl.dto.CustomerDetails;
 import com.mettl.dto.DtoResult;
 import com.mettl.dto.Transaction;
+import com.mettl.schemes.LoyaltyProgramSchemes;
+import com.mettl.type.CustomerClass;
 
 /**
  * @author amahajan
@@ -60,6 +59,7 @@ public class LoyaltyProgramImpl {
 				dto.setCustomerClass(cClass);
 				// Calculate loyalty points
 				long totLPoints = getLoyaltyPoints(cClass, totalAmount);
+				dto.setTotalPoints(totLPoints);
 			}
 			resultList.add(dto);
 		}
@@ -77,24 +77,39 @@ public class LoyaltyProgramImpl {
 		CustomerClass cusClass = null;
 		if (totalAmount >= 50000) {
 			cusClass = CustomerClass.GOLD;
-		} else if (totalAmount >= 25000 && totalAmount < 50000) {
+		}
+		else if (totalAmount >= 25000 && totalAmount < 50000) {
 			cusClass = CustomerClass.SILVER;
-		} else if (totalAmount < 25000) {
+		}
+		else if (totalAmount < 25000) {
 			cusClass = CustomerClass.NORMAL;
 		}
 		return cusClass;
 	}
 
+	/**
+	 * This method is used to calculate loyalty points for a given transaction
+	 * amount and customer class.
+	 * 
+	 * @param cClass
+	 * @param totalAmount
+	 * @return points
+	 */
 	private long getLoyaltyPoints(CustomerClass cClass, long totalAmount) {
+		long loyPoints = 0;
 		if (cClass == CustomerClass.GOLD) {
-
-			ILoyaltyProgramStrategy = new GoldLoyaltyProgram(totalAmount);
-		} else if (cClass == CustomerClass.SILVER) {
-
-		} else if (cClass == CustomerClass.NORMAL) {
-
+			loyPoints = LoyaltyProgramSchemes
+					.getLoyaltyPointsForGoldClass(totalAmount);
+		}
+		else if (cClass == CustomerClass.SILVER) {
+			loyPoints = LoyaltyProgramSchemes
+					.getLoyaltyPointsForSilverClass(totalAmount);
+		}
+		else if (cClass == CustomerClass.NORMAL) {
+			loyPoints = LoyaltyProgramSchemes
+					.getLoyaltyPointsForNormalClass(totalAmount);
 		}
 
-		return 0;
+		return loyPoints;
 	}
 }
